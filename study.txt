@@ -10,3 +10,8 @@ git diff 查看工作区被跟踪的文件的修改详情
 git diff --cached 查看暂存区的全部修改
 git commit 命令把暂存区的修改提交到版本区，生成一个新的版本
 git log 查看版本区的提交历史记录
+git branch -avv 用来查看全部分支信息
+git commit -am xxxxx 将未添加到暂存区的修改，也就是工作区的修改也一并提交，但会略过未被跟踪的文件
+
+修改工作区 - 提交到暂存区 - 随时使用 git status 查看仓库状态 - 将暂存区的修改提交到版本区生成一次新的提交
+将本地新增的提交推送到 GitHub 远程仓库中 git push
