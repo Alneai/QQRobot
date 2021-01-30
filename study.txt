@@ -6,4 +6,7 @@ git status
 git add [] 跟踪新文件，即把新文件添加到暂存区
 git add .
 撤销暂存区的修改 git reset -- [文件名] 或者 git rm --cached [文件名]
-git diff 可以用来查看工作区被跟踪的文件的修改详情
+git diff 查看工作区被跟踪的文件的修改详情
+git diff --cached 查看暂存区的全部修改
+git commit 命令把暂存区的修改提交到版本区，生成一个新的版本
+git log 查看版本区的提交历史记录
