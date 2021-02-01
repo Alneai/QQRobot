@@ -1,2 +1,1 @@
 # QQRobot
-Study Git
