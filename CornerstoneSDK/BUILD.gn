@@ -1,5 +1,5 @@
  # 插件文件名
-plugin_name = "cornerstone_sdk_demo.dll"
+plugin_name = "mypulgin.dll"
 
 # 定义一个动态链接库目标
 shared_library("../out/" + plugin_name)
