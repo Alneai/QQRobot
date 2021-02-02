@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include <string>
+#include <sstream>
+#include <iostream>
 
 using namespace std;
 
@@ -15,10 +17,10 @@ const char *Configuration = R"CFG(
     "插件名称": "QQRobot",
     "插件作者": "Alneai",
     "插件版本": "1.0.0",
-    "插件说明": "simple",
+    "插件说明": "简单的自定义功能",
     "所需权限":
     {
-        "输出日志": "<这里填写申请理由>",
+        "输出日志": "输出日志",
         "发送好友消息": "与好友互动",
         "发送群消息": "与群成员互动",
         "发送群临时消息": "与群成员单独互动",
@@ -206,6 +208,51 @@ EventProcessEnum OnGroupMessage(GroupMessageData data)
                 members += sum_string(member_info.QQNumber, ": ", member_info.Name, "\n");
             }
             api->SendGroupMessage(data.ThisQQ, data.MessageGroupQQ, members);
+        }
+    }
+    else if (content.substr(0, 2) == "//")
+    {
+        // 自定义指令
+        if (content.size() == 2)
+            return EventProcessEnum::Ignore;
+        if (content.size() > 6 && content.substr(2, 4) == "calc")
+        {
+            uint64_t a = 0, b = 0, c = 0;
+            string express = content.substr(6);
+            char op = '!';
+            for (auto i = 0; i < express.size(); i++)
+            {
+                if (!isdigit(express[i]))
+                {
+                    if (express[i] != '+' && express[i] != '-' && express[i] != '*' && express[i] != '/')
+                        return EventProcessEnum::Ignore;
+                    else if (op == '!')
+                        op = express[i];
+                    else return EventProcessEnum::Ignore;
+                }
+                else if (op == '!')
+                    a = a * 10 + express[i] - '0';
+                else
+                    b = b * 10 + express[i] - '0';
+            }
+            if (op == '+')
+                c = a + b;
+            else if (op == '-')
+                c = a - b;
+            else if (op == '*')
+                c = a * b;
+            else if (op == '/')
+                c = a / b;
+            else
+                return EventProcessEnum::Ignore;
+            stringstream result;
+            result << c;
+            api->OutputLog("计算成功");
+            api->SendGroupMessage(data.ThisQQ, data.MessageGroupQQ, result.str());
+        }
+        else
+        {
+            return EventProcessEnum::Ignore;
         }
     }
     else
