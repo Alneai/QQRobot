@@ -214,7 +214,10 @@ EventProcessEnum OnGroupMessage(GroupMessageData data)
     {
         // 自定义指令
         if (content.size() == 2)
+        {
+            api->OutputLog("指令非法");
             return EventProcessEnum::Ignore;
+        }
         if (content.size() > 6 && content.substr(2, 4) == "calc")
         {
             uint64_t a = 0, b = 0, c = 0;
@@ -224,11 +227,20 @@ EventProcessEnum OnGroupMessage(GroupMessageData data)
             {
                 if (!isdigit(express[i]))
                 {
-                    if (express[i] != '+' && express[i] != '-' && express[i] != '*' && express[i] != '/')
+                    if (express[i] == ' ')
+                        continue;
+                    else if (express[i] != '+' && express[i] != '-' && express[i] != '*' && express[i] != '/')
+                    {
+                        api->OutputLog("计算失败：出现不合法字符");
                         return EventProcessEnum::Ignore;
+                    }
                     else if (op == '!')
                         op = express[i];
-                    else return EventProcessEnum::Ignore;
+                    else
+                    {
+                        api->OutputLog("计算失败：出现不合法字符");
+                        return EventProcessEnum::Ignore;
+                    }
                 }
                 else if (op == '!')
                     a = a * 10 + express[i] - '0';
@@ -244,7 +256,15 @@ EventProcessEnum OnGroupMessage(GroupMessageData data)
             else if (op == '/')
                 c = a / b;
             else
+            {
+                api->OutputLog("计算失败");
                 return EventProcessEnum::Ignore;
+<<<<<<< HEAD
+=======
+            }
+            stringstream result;
+            result << c;
+>>>>>>> 8bc9f8ce8a8cc1c0d7818cd1530fa5a9823dccd0
             api->OutputLog("计算成功");
             api->SendGroupMessage(data.ThisQQ, data.MessageGroupQQ, sum_string(c));
         }
