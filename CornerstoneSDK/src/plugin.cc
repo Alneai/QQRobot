@@ -245,10 +245,8 @@ EventProcessEnum OnGroupMessage(GroupMessageData data)
                 c = a / b;
             else
                 return EventProcessEnum::Ignore;
-            stringstream result;
-            result << c;
             api->OutputLog("计算成功");
-            api->SendGroupMessage(data.ThisQQ, data.MessageGroupQQ, result.str());
+            api->SendGroupMessage(data.ThisQQ, data.MessageGroupQQ, sum_string(c));
         }
         else
         {
@@ -376,9 +374,12 @@ EventProcessEnum OnEvent(EventData data)
             break;
         // 群事件_某人被禁言
         case EventTypeEnum::Group_MemberShutUp:
+            api->OutputLog("禁言事件回复");
+            api->SendGroupMessage(data.ThisQQ, data.SourceGroupQQ, sum_string("sb管理", data.OperateQQName, "将", data.TriggerQQName, "禁言了\n", data.MessageContent));
             break;
         // 群事件_某人撤回事件
         case EventTypeEnum::Group_MemberUndid:
+            
             break;
         // 群事件_某人被取消管理
         case EventTypeEnum::Group_AdministratorTook:
